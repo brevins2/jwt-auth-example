@@ -1,5 +1,3 @@
-// const db = require('../db');
-
 const mysql = require("mysql2");
 
 const db = mysql.createConnection({
@@ -13,11 +11,11 @@ const User = {};
 
 User.create = (username, email, password, callback) => {
   db.query(
-    "INSERT INTO users VALUES (?, ?, ?)",
-    [username, email, password],
-    (err, results) => {
-      if (err) return callback(err);
-      return callback(null, results);
+    "INSERT INTO users SET ?",
+    { username: username, email: email, password: password },
+    (req, res) => {
+      if (req) console.log(req);
+      console.log(res);
     }
   );
 };
@@ -32,6 +30,16 @@ User.findByUsername = (username, callback) => {
       return callback(null, results[0]);
     }
   );
+};
+
+User.getAllUsers = () => {
+  db.query("SELECT * FROM users", (req, res) => {
+    return res;
+    // .send({
+    //   message: "users retrieved successfully",
+    //   data: res,
+    // });
+  });
 };
 
 module.exports = User;
